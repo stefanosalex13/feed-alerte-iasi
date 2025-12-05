@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <title>Alerte Iași Live</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 10px;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .titlu {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .meta {
+      font-size: 12px;
+      color: gray;
+      margin: 5px 0;
+    }
+    .descriere {
+      font-size: 14px;
+      margin: 8px 0;
+    }
+    .butoane a {
+      text-decoration: none;
+      font-size: 13px;
+      margin-right: 15px;
+      color: #0066ff;
+    }
+  </style>
+</head>
+<body>
+
+<div id="feed">Se încarcă alertele...</div>
+
+<script>
+fetch("https://URL-UL-TAU-DIN-n8n/feed.json")
+  .then(res => res.json())
+  .then(data => {
+    const feed = document.getElementById("feed");
+    feed.innerHTML = "";
+    data.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.innerHTML = `
+        <div class="titlu">${item.icon} ${item.titlu}</div>
+        <div class="meta">📍 ${item.zona} | 🕒 ${item.data}</div>
+        <div class="descriere">${item.descriere}</div>
+        <div class="butoane">
+          <a href="${item.link}" target="_blank">Vezi detalii</a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u=${item.link}" target="_blank">Distribuie</a>
+        </div>
+      `;
+      feed.appendChild(card);
+    });
+  })
+  .catch(() => {
+    document.getElementById("feed").innerText = "Nu pot încărca feed-ul.";
+  });
+</script>
+
+</body>
+</html>
